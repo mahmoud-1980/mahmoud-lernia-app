@@ -1,1 +1,32 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mahmoud-lernia-app
+  annotations:
+    image.openshift.io/triggers: '[{
+      "from": {
+        "kind": "ImageStreamTag",
+        "name": "mahmoud-lernia-app:latest"
+      },
+      "fieldPath": "spec.template.spec.containers[?(@.name==\"mahmoud-lernia-app\")].image"
+    }]'
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mahmoud-lernia-app
+  template:
+    metadata:
+      annotations:
+        alpha.image.policy.openshift.io/resolve-names: '*'
+      labels:
+        app: mahmoud-lernia-app
+    spec:
+      containers:
+      - name: mahmoud-lernia-app
+        image: mahmoud-lernia-app:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
 
